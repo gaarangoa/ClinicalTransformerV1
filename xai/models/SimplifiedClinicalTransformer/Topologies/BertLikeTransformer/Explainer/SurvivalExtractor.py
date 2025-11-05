@@ -2,8 +2,6 @@ from xai.models import load_transformer as load_model
 from .SurvivalEvaluator import Evaluator as TransformerSurvivalEvaluator
 from .SurvivalExplainer import survival_attention_scores
 
-from tqdm.auto import tqdm
-import umap
 import pandas as pd
 import numpy as np
 from .utils import Output
