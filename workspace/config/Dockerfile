@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:2.6.0-gpu-jupyter
+FROM tensorflow/tensorflow:2.6.0-jupyter
 
 RUN pip install --upgrade pip 
 RUN pip install jupyterlab==3.2.9
