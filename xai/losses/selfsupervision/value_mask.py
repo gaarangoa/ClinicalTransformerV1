@@ -8,7 +8,7 @@ class ValueMaskLoss(Loss):
     """
 
     def __init__(self, name="value_mask_loss"):
-        super().__init__(name=name, reduction=tf.keras.losses.Reduction.NONE)
+        super().__init__(name=name, reduction=tf.keras.losses.Reduction.SUM_OVER_BATCH_SIZE)
         self.mse = tf.keras.losses.MeanSquaredError(
             reduction=tf.keras.losses.Reduction.NONE
         )
@@ -25,7 +25,8 @@ class ValueMaskLoss(Loss):
         weighted = loss * mask
 
         denom = tf.reduce_sum(mask, axis=1) + 1e-8
-        return tf.reduce_sum(weighted, axis=1) / denom
+        per_sample = tf.reduce_sum(weighted, axis=1) / denom
+        return per_sample
 
 
 loss = ValueMaskLoss()
