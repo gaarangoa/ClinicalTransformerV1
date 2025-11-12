@@ -98,8 +98,7 @@ from torch.utils.data import DataLoader
 from accelerate import Accelerator
 
 from ctv2 import (
-    TabularTokenizer,
-    FeatureTokenizer,
+    FeatureValueTokenizer,
     ValueMaskedAnnDataDataset,
     value_mask_collate,
     ValueMaskedConfig,
@@ -108,14 +107,14 @@ from ctv2 import (
 )
 
 raw = pd.read_csv("cohort.csv")
-tab_tokenizer = TabularTokenizer(
+fv_tokenizer = FeatureValueTokenizer(
     categorical_features=["sex", "stage"],
     binary_features=["smoker"],
     continuous_features=["age", "ldh", "bmi"],
 ).fit(raw)
-adata = tab_tokenizer.transform(raw)
 
-tokenizer = FeatureTokenizer(adata.var_names)
+tokenizer = fv_tokenizer.tokenizer
+adata = fv_tokenizer.to_anndata(raw)
 dataset = ValueMaskedAnnDataDataset(adata, tokenizer, max_features=256, mask_fraction=0.2)
 loader = DataLoader(dataset, batch_size=32, shuffle=True, collate_fn=value_mask_collate)
 
@@ -125,6 +124,12 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4)
 
 trainer = ValueMaskedTrainer(model, accelerator=Accelerator())
 trainer.fit(loader, optimizer, epochs=10)
+```
+
+You can also obtain ready-to-feed tensors directly:
+
+```python
+token_ids, values, padding_mask = fv_tokenizer.encode(raw)
 ```
 
 ### Predicting 

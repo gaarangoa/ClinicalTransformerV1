@@ -1,4 +1,4 @@
-from .tokenizer import FeatureTokenizer
+from .tokenizer import FeatureTokenizer, FeatureValueTokenizer
 from .preprocessing import TabularTokenizer
 from .data import ValueMaskedAnnDataDataset, value_mask_collate
 from .models import ValueMaskedConfig, ValueMaskedTransformer
@@ -7,6 +7,7 @@ from .training import ValueMaskedTrainer
 
 __all__ = [
     "FeatureTokenizer",
+    "FeatureValueTokenizer",
     "TabularTokenizer",
     "ValueMaskedAnnDataDataset",
     "value_mask_collate",
